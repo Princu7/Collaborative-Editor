@@ -1,13 +1,11 @@
 const socket = io.connect('http://localhost:8080');
-const toolbarOptions = ['bold', 'italic', 'underline', 'strike'];
 var editRequestSent = false;
 var users = [];
 var deltasArr = [];
 var curEditing = false;
 
 const options = {
-  // debug: 'info',
-  placeholder: 'Compose an epic...',
+  placeholder: 'Write your darkest fantasies ... Just kidding :)',
   readOnly: true,
   theme: 'snow'
 };
@@ -62,6 +60,7 @@ function checkAccessHandler(socketId) {
   if (socket.id == socketId) {
     console.log('Currente client now editing');
     quill.enable(true);
+    quill.focus();
     editRequestSent = false;
     curEditing = true;
     return;
