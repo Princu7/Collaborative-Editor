@@ -4,8 +4,7 @@ const app = express();
 const server = require('http').createServer(app);
 const io = socket(server);
 
-server.listen(8080);
-console.log('Server listening on port 8080');
+server.listen(process.env.PORT || 5000);
 app.use(express.static('public'));
 
 const deltas = [];

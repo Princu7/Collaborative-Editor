@@ -1,5 +1,4 @@
-const endpoint = (process.env.STAGE === 'PROD') ? 'https://rocketium-editor-abhishek.herokuapp.com/' : 'http://localhost:8080';
-const socket = io.connect(endpoint);
+const socket = io.connect('https://rocketium-editor-abhishek.herokuapp.com/' || 'http://localhost:5000');
 var editRequestSent = false;
 var users = [];
 var deltasArr = [];
