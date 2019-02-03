@@ -1,4 +1,5 @@
-const socket = io.connect('https://rocketium-editor-abhishek.herokuapp.com/' || 'http://localhost:5000');
+// const socket = io.connect('https://rocketium-editor-abhishek.herokuapp.com/' || 'http://localhost:5000');
+const socket = io.connect('http://localhost:5000');
 var editRequestSent = false;
 var users = [];
 var deltasArr = [];
@@ -54,7 +55,7 @@ function updatePeerDisplay() {
 
   if (curEditing) {
     $('#active').html('<p>You</p>')
-  } else {
+  } else if (curEditingUser) {
     $('#active').html(`<p>User: ${curEditingUser} </p>`)
   }
   users.forEach((user) => {

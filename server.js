@@ -7,6 +7,8 @@ const io = socket(server);
 server.listen(process.env.PORT || 5000);
 app.use(express.static('public'));
 
+console.log('Why no logs');
+
 const deltas = [];
 const socketIds = [];
 const waitingUsers = [];
@@ -15,6 +17,7 @@ var curEditSocket;
 io.sockets.on('connection', connection);
 
 function connection(socket) {
+	console.log('what the fuck');
 	console.log('a new user with id ' + socket.id + " has entered");
 	socketIds.push(socket.id);
 	io.emit('userConnect', {id: socket.id});
@@ -42,6 +45,7 @@ function connection(socket) {
 		} else {
 			if (!waitingUsers.length) {
 				curEditSocket = null;
+				io.emit('newEditor', curEditSocket);
 				return;
 			}
 			curEditSocket = waitingUsers.shift();
@@ -74,6 +78,7 @@ function connection(socket) {
 		console.log('Waiting uers', waitingUsers);
 		if (!waitingUsers.length) {
 			curEditSocket = null;
+			io.emit('newEditor', curEditSocket);
 			return;
 		}
 
