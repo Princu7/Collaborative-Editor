@@ -3,6 +3,7 @@ var editRequestSent = false;
 var users = [];
 var deltasArr = [];
 var curEditing = false;
+var curEditingUser;
 
 const options = {
   placeholder: 'Write your darkest fantasies ... Just kidding :)',
@@ -23,10 +24,14 @@ quill.on('selection-change', selectionChangeHandler);
 
 function userAddHandler(data) {
   users.push(data.id);
+  updatePeerDisplay();
 }
 
 function userLeftHandler(data) {
-  users.splice(users.indexOf(data.id), 1);
+  if (users.indexOf(data.id) >= 0) {
+    users.splice(users.indexOf(data.id), 1);
+    updatePeerDisplay();
+  }
 }
 
 function getEditAccess() {
@@ -38,11 +43,39 @@ function getEditAccess() {
   editRequestSent = true;
 }
 
+function updatePeerDisplay() {
+  $('#active').html('');
+  $('#present').html('');
+
+  console.log('Inside peer display');
+  console.log('users', users);
+  console.log('Cur user', curEditingUser);
+  console.log('Cur editing', curEditing);
+
+  if (curEditing) {
+    $('#active').html('<p>You</p>')
+  } else {
+    $('#active').html(`<p>User: ${curEditingUser} </p>`)
+  }
+  users.forEach((user) => {
+    if (user == curEditingUser) {
+      return;
+    }
+    if (user == socket.id) {
+      $('#present').append('<p> You </p>')
+    } else {
+      $('#present').append(`<p> User: ${user} </p>`)
+    }
+  });
+}
+
 function initHandler(data) {
   console.log('Inside init handler');
   users = data.socketIds;
   deltasArr = data.deltas;
-  console.log('Deltas arr', deltasArr);
+  curEditingUser = data.curEditSocket;
+  console.log('data', data);
+  updatePeerDisplay();
   getEditAccess();
 
   if (deltasArr.length == 0) {
@@ -57,14 +90,17 @@ function initHandler(data) {
 
 function checkAccessHandler(socketId) {
   console.log('Check access handler ');
+  curEditingUser = socketId;
   if (socket.id == socketId) {
     console.log('Currente client now editing');
     quill.enable(true);
     quill.focus();
     editRequestSent = false;
     curEditing = true;
+    updatePeerDisplay();
     return;
   }
+  updatePeerDisplay();
   quill.disable();
 }
 

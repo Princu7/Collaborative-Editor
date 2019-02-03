@@ -21,7 +21,7 @@ function connection(socket) {
 	io.emit('userConnect', {id: socket.id});
 
 	// Sent the whole initial content to the connected user
-	io.to(socket.id).emit('init', {socketIds, deltas});
+	io.to(socket.id).emit('init', {socketIds, deltas, curEditSocket});
 
 	socket.on('disconnect', disconnectHandler);
 	socket.on('getEditAccess', getAccessHandler);
