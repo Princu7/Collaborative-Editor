@@ -1,4 +1,5 @@
-const socket = io.connect('http://localhost:8080');
+const endpoint = (process.env.STAGE === 'PROD') ? 'https://rocketium-editor-abhishek.herokuapp.com/' : 'http://localhost:8080';
+const socket = io.connect(endpoint);
 var editRequestSent = false;
 var users = [];
 var deltasArr = [];
@@ -6,7 +7,7 @@ var curEditing = false;
 var curEditingUser;
 
 const options = {
-  placeholder: 'Write your darkest fantasies ... Just kidding :)',
+  placeholder: 'Write what you want. Write what you will',
   readOnly: true,
   theme: 'snow'
 };
